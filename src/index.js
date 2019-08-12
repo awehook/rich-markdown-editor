@@ -52,7 +52,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     onImageUploadStart: () => {},
     onImageUploadStop: () => {},
     plugins: [],
-    tooltip: "span"
+    tooltip: "span",
   };
 
   editor: Editor;
@@ -230,8 +230,6 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   };
 
   render = () => {
-    console.log("render");
-    console.log(this.props.editorValue);
     const {
       readOnly,
       pretitle,
