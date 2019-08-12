@@ -24,6 +24,7 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
   state = {
     readOnly: false,
     dark: localStorage.getItem("dark") === "enabled",
+    defaultValue: defaultValue,
   };
 
   handleToggleReadOnly = () => {
@@ -36,9 +37,18 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
     localStorage.setItem("dark", dark ? "enabled" : "disabled");
   };
 
+  handleTest = () => {
+    this.setState({
+      defaultValue: "moe",
+    });
+  };
+
   handleChange = debounce(value => {
-    localStorage.setItem("saved", value());
-  }, 250);
+    // localStorage.setItem("saved", value());
+    this.setState({
+      defaultValue: value,
+    });
+  });
 
   render() {
     const { body } = document;
@@ -53,11 +63,14 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
           <button type="button" onClick={this.handleToggleDark}>
             {this.state.dark ? "Light Theme" : "Dark Theme"}
           </button>
+          <button type="button" onClick={this.handleTest}>
+            test
+          </button>
         </p>
         <Editor
           id="example"
           readOnly={this.state.readOnly}
-          defaultValue={defaultValue}
+          editorValue={this.state.defaultValue}
           onSave={options => console.log("Save triggered", options)}
           onCancel={() => console.log("Cancel triggered")}
           onChange={this.handleChange}

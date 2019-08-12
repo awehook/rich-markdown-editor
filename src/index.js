@@ -21,7 +21,7 @@ const defaultOptions = {};
 
 export type Props = {
   id?: string,
-  defaultValue: string,
+  editorValue: string,
   placeholder: string,
   pretitle?: string,
   plugins: Plugin[],
@@ -42,21 +42,17 @@ export type Props = {
   onShowToast?: (message: string) => void,
   getLinkComponent?: Node => ?React.ComponentType<any>,
   className?: string,
-  style?: Object,
-};
-
-type State = {
-  editorValue: Value,
+  style?: Object
 };
 
 class RichMarkdownEditor extends React.PureComponent<Props, State> {
   static defaultProps = {
-    defaultValue: "",
+    editorValue: "",
     placeholder: "Write something nice…",
     onImageUploadStart: () => {},
     onImageUploadStop: () => {},
     plugins: [],
-    tooltip: "span",
+    tooltip: "span"
   };
 
   editor: Editor;
@@ -69,16 +65,12 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
 
     const builtInPlugins = createPlugins({
       placeholder: props.placeholder,
-      getLinkComponent: props.getLinkComponent,
+      getLinkComponent: props.getLinkComponent
     });
 
     // in Slate plugins earlier in the stack can opt not to continue
     // to later ones. By adding overrides first we give more control
     this.plugins = [...props.plugins, ...builtInPlugins];
-
-    this.state = {
-      editorValue: Markdown.deserialize(props.defaultValue),
-    };
   }
 
   componentDidMount() {
@@ -126,15 +118,14 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   };
 
   value = (): string => {
-    return Markdown.serialize(this.state.editorValue);
+    // return Markdown.serialize(this.props.editorValue);
+    return this.props.editorValue;
   };
 
   handleChange = ({ value }: { value: Value }) => {
-    this.setState({ editorValue: value }, state => {
-      if (this.props.onChange && !this.props.readOnly) {
-        this.props.onChange(this.value);
-      }
-    });
+    if (this.props.onChange && !this.props.readOnly) {
+      this.props.onChange(value);
+    }
   };
 
   handleDrop = async (ev: SyntheticDragEvent<*>) => {
@@ -231,7 +222,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     if (this.prevSchema !== this.props.schema) {
       this.schema = {
         ...defaultSchema,
-        ...(this.props.schema || {}),
+        ...(this.props.schema || {})
       };
       this.prevSchema = this.props.schema;
     }
@@ -239,6 +230,8 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   };
 
   render = () => {
+    console.log("render");
+    console.log(this.props.editorValue);
     const {
       readOnly,
       pretitle,
@@ -262,7 +255,10 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     } = this.props;
 
     const theme = this.props.theme || (dark ? darkTheme : lightTheme);
-
+    let editorValue = this.props.editorValue;
+    if (typeof this.props.editorValue === "string") {
+      editorValue = Markdown.deserialize(this.props.editorValue);
+    }
     return (
       <Flex
         style={style}
@@ -279,7 +275,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
           <StyledEditor
             ref={this.setEditorRef}
             plugins={this.plugins}
-            value={this.state.editorValue}
+            value={editorValue}
             commands={commands}
             queries={queries}
             placeholder={placeholder}

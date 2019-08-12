@@ -1,8 +1,9 @@
 {
-  "name": "rich-markdown-editor",
+  "name": "awehook-rich-markdown-editor",
   "description": "A rich text editor with Markdown shortcuts built on Slate",
-  "version": "9.8.5",
+  "version": "1.0.0",
   "main": "lib/index.js",
+  "files": ["lib/"],
   "license": "BSD-3-Clause",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -76,7 +77,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outline/rich-markdown-editor.git"
+    "url": "git+https://github.com/awehook/rich-markdown-editor.git"
   },
   "keywords": [
     "editor",
